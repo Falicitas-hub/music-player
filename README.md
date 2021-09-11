@@ -5,6 +5,7 @@
 vue2 + vue-router + webpack + ES6/7
 
 # 项目运行
+```javascript
 git clone https://github.com/Falicitas-hub/music-player.git  
 
 cd music-player
