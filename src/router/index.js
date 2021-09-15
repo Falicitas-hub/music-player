@@ -1,11 +1,11 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 
-import Discovery from '@/components/Discovery'
-import PlayList from '@/components/PlayList'
-import Songs from '@/components/Songs'
-import Mvs from '@/components/Mvs'
-import Result from '@/components/Result'
+import Discovery from '@/views/Discovery'
+import PlayList from '@/views/PlayList'
+import Songs from '@/views/Songs'
+import Mvs from '@/views/Mvs'
+import Result from '@/views/Result'
 Vue.use(VueRouter);
 const routes = [
     {

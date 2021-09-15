@@ -1,6 +1,12 @@
 <template>
   <div class="header">
-    <input type="text" v-model="inputValue" @keyup.enter="toSearch" />
+    <el-input
+      style="width: 350px"
+      placeholder="搜索"
+      v-model="inputValue"
+      @keyup.enter="toSearch"
+    >
+    </el-input>
   </div>
 </template>
 
@@ -28,5 +34,11 @@ export default {
   display: flex;
   align-items: center;
   background-color: #f9f9f9;
+  padding-bottom: 30px;
+}
+.el-input__inner {
+  position: relative;
+  left: 1300px;
+  top: 10px;
 }
 </style>
