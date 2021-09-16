@@ -2,7 +2,9 @@
   <div class="discovery">
     <el-carousel :interval="4000" type="card">
       <el-carousel-item v-for="(item, index) in banners" :key="index">
-        <img :src="item.imageUrl" alt="" />
+        <div class="img-container">
+          <img :src="item.imageUrl" alt="" />
+        </div>
       </el-carousel-item>
     </el-carousel>
     <h3>推荐歌单</h3>
@@ -120,6 +122,10 @@ export default {
 </script>
 
 <style>
+.img-container img {
+  width: 643px;
+  height: 300px;
+}
 .el-carousel__item {
   border-radius: 15px;
 }
@@ -137,7 +143,7 @@ export default {
 }
 
 .item img {
-  width: 200px;
+  width: 170px;
 }
 .news {
   display: flex;

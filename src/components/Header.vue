@@ -4,7 +4,7 @@
       style="width: 350px"
       placeholder="搜索"
       v-model="inputValue"
-      @keyup.enter="toSearch"
+      @keyup.enter.native="toSearch"
     >
     </el-input>
   </div>
@@ -20,7 +20,7 @@ export default {
   methods: {
     toSearch() {
       if (this.inputValue == "") {
-        alert("请输入内容");
+        this.$message.warning("请输入内容");
       } else {
         this.$router.push(`/result?p=${this.inputValue}`);
       }

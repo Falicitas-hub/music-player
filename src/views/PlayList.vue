@@ -14,19 +14,105 @@
         </div>
       </div>
     </div>
-    <div class="news">
-      <div
-        class="new"
-        v-for="(item, index) in list"
-        :key="index"
-        @click="playMusic(item.id)"
+    <div class="tab-bar">
+      <span
+        class="title"
+        :class="{ active: tag == '全部' }"
+        @click="tag = '全部'"
+        >全部</span
       >
+      <span
+        class="title"
+        :class="{ active: tag == '欧美' }"
+        @click="tag = '欧美'"
+        >欧美</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '华语' }"
+        @click="tag = '华语'"
+        >华语</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '流行' }"
+        @click="tag = '流行'"
+        >流行</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '说唱' }"
+        @click="tag = '说唱'"
+        >说唱</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '摇滚' }"
+        @click="tag = '摇滚'"
+        >摇滚</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '民谣' }"
+        @click="tag = '民谣'"
+        >民谣</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '电子' }"
+        @click="tag = '电子'"
+        >电子</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '轻音乐' }"
+        @click="tag = '轻音乐'"
+        >轻音乐</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '影视原声' }"
+        @click="tag = '影视原声'"
+        >影视原声</span
+      >
+      <span class="title" :class="{ active: tag == 'ACG' }" @click="tag = 'ACG'"
+        >ACG</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '怀旧' }"
+        @click="tag = '怀旧'"
+        >怀旧</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '治愈' }"
+        @click="tag = '治愈'"
+        >治愈</span
+      >
+      <span
+        class="title"
+        :class="{ active: tag == '旅行' }"
+        @click="tag = '旅行'"
+        >旅行</span
+      >
+    </div>
+    <div class="items">
+      <div class="item" v-for="(item, index) in list" :key="index">
         <div class="img-wrap">
           <img :src="item.coverImgUrl" alt="" />
         </div>
         <div>{{ item.name }}</div>
       </div>
     </div>
+    <el-pagination
+      layout="prev, pager, next"
+      :total="total"
+      :current-page="page"
+      :page-size="10"
+      @current-change="handleCurrentChange"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -39,39 +125,59 @@ export default {
       page: 1,
       topList: {},
       list: [],
+      tag: "全部",
     };
   },
+  watch: {
+    tag() {
+      this.page = 1;
+      this.getTopData();
+      this.getListData();
+    },
+  },
   created() {
-    axios({
-      url: "https://autumnfish.cn/top/playlist/highquality",
-      method: "get",
-      params: {
-        limit: 1,
-        cat: "全部",
-      },
-    }).then((res) => {
-      if (res.status !== 200) {
-        this.$message.error("获取信息失败");
-      } else {
-        this.topList = res.data.playlists[0];
-      }
-    });
-    axios({
-      url: "https://autumnfish.cn/top/playlist/",
-      method: "get",
-      params: {
-        limit: 10,
-        offset: 0,
-        cat: "全部",
-      },
-    }).then((res) => {
-      if (res.status !== 200) {
-        this.$message.error("获取信息失败");
-      } else {
-        this.list = res.data.playlists;
-        console.log(this.list);
-      }
-    });
+    this.getTopData();
+    this.getListData();
+  },
+  methods: {
+    getTopData() {
+      axios({
+        url: "https://autumnfish.cn/top/playlist/highquality",
+        method: "get",
+        params: {
+          limit: 1,
+          cat: this.tag,
+        },
+      }).then((res) => {
+        if (res.status !== 200) {
+          this.$message.error("获取信息失败");
+        } else {
+          this.topList = res.data.playlists[0];
+        }
+      });
+    },
+    getListData() {
+      axios({
+        url: "https://autumnfish.cn/top/playlist/",
+        method: "get",
+        params: {
+          limit: 10,
+          offset: (this.page - 1) * 10,
+          cat: this.tag,
+        },
+      }).then((res) => {
+        if (res.status !== 200) {
+          this.$message.error("获取信息失败");
+        } else {
+          this.total = res.data.total;
+          this.list = res.data.playlists;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getListData();
+    },
   },
 };
 </script>
@@ -93,9 +199,12 @@ img {
   margin-left: 10px;
 }
 .title {
-  font-size: 23px;
-  font-weight: 1000;
-  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 20px;
+}
+.title:hover {
+  cursor: pointer;
 }
 .info {
   font-size: 14px;
@@ -113,10 +222,17 @@ img {
   font-size: 14px;
   max-width: 200px;
 }
-.new img:hover {
-  cursor: pointer;
-}
 .new img {
   width: 200px;
+}
+.tab-bar {
+  margin-top: 10px;
+}
+
+.active {
+  opacity: 0.6;
+  color: red;
+  background-color: rgba(221, 71, 71, 0.808);
+  border-radius: 5px;
 }
 </style>
