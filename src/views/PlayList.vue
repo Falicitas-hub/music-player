@@ -202,6 +202,7 @@ img {
   font-size: 16px;
   font-weight: 500;
   margin: 20px;
+  text-align: center;
 }
 .title:hover {
   cursor: pointer;
@@ -232,7 +233,7 @@ img {
 .active {
   opacity: 0.6;
   color: red;
-  background-color: rgba(221, 71, 71, 0.808);
+  background-color: rgba(219, 118, 118, 0.808);
   border-radius: 5px;
 }
 </style>

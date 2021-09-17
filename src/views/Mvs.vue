@@ -244,6 +244,9 @@ export default {
 </script>
 
 <style>
+.section-wrap {
+  margin-top: 10px;
+}
 .section-wrap li {
   display: inline;
   margin: 10px;
