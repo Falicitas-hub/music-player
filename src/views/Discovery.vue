@@ -9,7 +9,12 @@
     </el-carousel>
     <h3>推荐歌单</h3>
     <div class="items">
-      <div class="item" v-for="(item, index) in list" :key="index">
+      <div
+        class="item"
+        v-for="(item, index) in list"
+        :key="index"
+        @click="toPlayList(item.id)"
+      >
         <div class="img-wrap">
           <img :src="item.picUrl" alt="" />
         </div>
@@ -18,23 +23,18 @@
     </div>
     <h3>最新音乐</h3>
     <div class="news">
-      <div
-        class="new"
-        v-for="(item, index) in songs"
-        :key="index"
-        @click="playMusic(item.id)"
-      >
-        <div class="img-wrap">
+      <div class="new" v-for="(item, index) in songs" :key="index">
+        <div class="img-wrap" @click="playMusic(item.id)">
           <img :src="item.picUrl" alt="" />
         </div>
-        <div>{{ item.name }}</div>
+        <div class="item-name">{{ item.name }}</div>
         <div>{{ item.song.artists[0].name }}</div>
       </div>
     </div>
     <h3>推荐MV</h3>
     <div class="mvs">
       <div class="mv" v-for="(item, index) in mvs" :key="index">
-        <div class="img-wrap">
+        <div class="img-wrap" @click="toMV(item.id)">
           <img :src="item.picUrl" alt="" />
         </div>
         <p class="name">{{ item.name }}</p>
@@ -117,6 +117,12 @@ export default {
         }
       });
     },
+    toPlayList(id) {
+      this.$router.push(`/playlists?q=${id}`);
+    },
+    toMV(id) {
+      this.$router.push(`/mv?q=${id}`);
+    },
   },
 };
 </script>
@@ -141,7 +147,13 @@ export default {
   font-size: 14px;
   max-width: 200px;
 }
-
+.item .item-name {
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: keep-all;
+}
 .item img {
   width: 170px;
 }
@@ -155,6 +167,13 @@ export default {
   margin: 10px;
   font-size: 14px;
   max-width: 200px;
+}
+.new .item-name {
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 .new img:hover {
   cursor: pointer;

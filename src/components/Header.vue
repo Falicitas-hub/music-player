@@ -22,7 +22,8 @@ export default {
       if (this.inputValue == "") {
         this.$message.warning("请输入内容");
       } else {
-        this.$router.push(`/result?p=${this.inputValue}`);
+        this.$router.push(`/result?p=${this.inputValue}`).catch((err) => {});
+        this.inputValue = "";
       }
     },
   },

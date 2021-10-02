@@ -6,7 +6,7 @@
         <img :src="topList.coverImgUrl" alt="" />
       </div>
       <div class="description">
-        <div class="title">
+        <div class="d-title">
           {{ topList.name }}
         </div>
         <div class="info">
@@ -98,7 +98,12 @@
       >
     </div>
     <div class="items">
-      <div class="item" v-for="(item, index) in list" :key="index">
+      <div
+        class="item"
+        v-for="(item, index) in list"
+        :key="index"
+        @click="toPlayList(item.id)"
+      >
         <div class="img-wrap">
           <img :src="item.coverImgUrl" alt="" />
         </div>
@@ -178,6 +183,9 @@ export default {
       this.page = val;
       this.getListData();
     },
+    toPlayList(id) {
+      this.$router.push(`/playlists?q=${id}`);
+    },
   },
 };
 </script>
@@ -235,5 +243,10 @@ img {
   color: red;
   background-color: rgba(219, 118, 118, 0.808);
   border-radius: 5px;
+}
+.d-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 </style>

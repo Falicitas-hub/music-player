@@ -33,14 +33,26 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="歌单" name="lists">
-        <h2>2</h2>
+        <div class="items">
+          <div class="item" v-for="(item, index) in playList" :key="index">
+            <div class="img-wrap" @click="toPlayList(item.id)">
+              <img :src="item.coverImgUrl" alt="" />
+            </div>
+            <p class="name">{{ item.name }}</p>
+          </div>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="MV" name="mv">
-        <h2>3</h2>
+        <div class="items">
+          <div class="item" v-for="(item, index) in mv" :key="index">
+            <div class="img-wrap" @click="toMV(item.id)">
+              <img :src="item.cover" alt="" />
+            </div>
+            <p class="name">{{ item.name }}</p>
+          </div>
+        </div>
       </el-tab-pane>
     </el-tabs>
-    <el-pagination background layout="prev, pager, next" :total="1000">
-    </el-pagination>
   </div>
 </template>
 
@@ -51,12 +63,17 @@ export default {
     return {
       activeName: "songs",
       songList: [],
+      playList: [],
+      count: 0,
+      mv: [],
+      page: 1,
     };
   },
   watch: {
     activeName() {
       let type = 1;
-      switch (type) {
+      let limit = 10;
+      switch (this.activeName) {
         case "songs":
           type = 1;
           break;
@@ -74,27 +91,35 @@ export default {
         method: "get",
         params: {
           keywords: this.$route.query.p,
-          limit: 10,
+          limit,
           type,
         },
       }).then((res) => {
         if (res.status !== 200) {
           this.$message.error("获取信息失败");
         } else {
-          this.songList = res.data.result.songs;
-          for (let i = 0; i < this.songList.length; i++) {
-            let duration = this.songList[i].duration;
-            let min = parseInt(duration / 1000 / 60);
-            let sec = parseInt((duration / 1000) % 60);
-            if (min < 10) {
-              min = "0" + min;
+          if (type == 1) {
+            this.songList = res.data.result.songs;
+            for (let i = 0; i < this.songList.length; i++) {
+              let duration = this.songList[i].duration;
+              let min = parseInt(duration / 1000 / 60);
+              let sec = parseInt((duration / 1000) % 60);
+              if (min < 10) {
+                min = "0" + min;
+              }
+              if (sec < 10) {
+                sec = "0" + sec;
+              }
+              this.songList[i].duration = min + ":" + sec;
             }
-            if (sec < 10) {
-              sec = "0" + sec;
-            }
-            this.songList[i].duration = min + ":" + sec;
+            this.count = res.data.result.songCount;
+          } else if (type == 1000) {
+            this.playList = res.data.result.playlists;
+            this.count = res.data.result.playlistCount;
+          } else {
+            this.mv = res.data.result.mvs;
+            this.count = res.data.result.mvCount;
           }
-          this.count = res.data.result.songCount;
         }
       });
     },
@@ -145,6 +170,12 @@ export default {
           this.$parent.musicUrl = res.data.data[0].url;
         }
       });
+    },
+    toPlayList(id) {
+      this.$router.push(`/playlists?q=${id}`);
+    },
+    toMV(id) {
+      this.$router.push(`/mv?q=${id}`);
     },
   },
   created() {
